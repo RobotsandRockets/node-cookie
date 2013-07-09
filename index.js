@@ -5,21 +5,29 @@
 /// serialize('foo', 'bar', { httpOnly: true })
 ///   => "foo=bar; httpOnly"
 ///
-/// @param {String} name
+/// @param {String|Object} name
 /// @param {String} val
 /// @param {Object} options
 /// @return {String}
-var serialize = function(name, val, opt){
+var serialize = function(name, val, opt) {
     opt = opt || {};
     var enc = opt.encode || encode;
-    var pairs = [name + '=' + enc(val)];
+    var pairs = []
 
-    if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
-    if (opt.domain) pairs.push('Domain=' + opt.domain);
-    if (opt.path) pairs.push('Path=' + opt.path);
-    if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
-    if (opt.httpOnly) pairs.push('HttpOnly');
-    if (opt.secure) pairs.push('Secure');
+    if(typeof name === 'object') {
+      for(var key in name) {
+        pairs.push(serialize(key, name[key], opt))
+      }
+    } else {
+      pairs.push(name + '=' + enc(val));
+
+      if (opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
+      if (opt.domain) pairs.push('Domain=' + opt.domain);
+      if (opt.path) pairs.push('Path=' + opt.path);
+      if (opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+      if (opt.httpOnly) pairs.push('HttpOnly');
+      if (opt.secure) pairs.push('Secure');
+    }
 
     return pairs.join('; ');
 };

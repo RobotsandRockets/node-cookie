@@ -10,6 +10,12 @@ test('basic', function() {
     assert.equal('foo=bar%20baz', cookie.serialize('foo', 'bar baz'));
 });
 
+test('object', function() {
+    assert.equal('foo=bar', cookie.serialize({'foo' : 'bar'}));
+    assert.equal('foo=bar%20baz', cookie.serialize({'foo' : 'bar baz'}));
+    assert.equal('foo=12345; bar=baz', cookie.serialize({'foo' : 12345, 'bar' : 'baz'}));
+});
+
 test('path', function() {
     assert.equal('foo=bar; Path=/', cookie.serialize('foo', 'bar', {
         path: '/'

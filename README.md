@@ -16,6 +16,9 @@ var cookie = require('cookie');
 var hdr = cookie.serialize('foo', 'bar');
 // hdr = 'foo=bar';
 
+var hdr = cookie.serialize({'foo' : 'bar', 'baz' : 90210});
+// hdr = 'foo=bar; baz=90210';
+
 var cookies = cookie.parse('foo=bar; cat=meow; dog=ruff');
 // cookies = { foo: 'bar', cat: 'meow', dog: 'ruff' };
 ```
